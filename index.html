@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Wildlife Week — Signal Hunt</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(80, 120, 70, 0.18), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(180, 150, 60, 0.12), transparent 30%),
+        #0b0d0b;
+      color: #f2f2e9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    .top-label {
+      font-size: 11px;
+      letter-spacing: 4px;
+      opacity: 0.55;
+      text-align: center;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .card {
+      border: 1px solid rgba(255,255,255,0.13);
+      background: rgba(20, 23, 19, 0.92);
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 20px 70px rgba(0,0,0,0.45);
+    }
+
+    h1 {
+      font-size: clamp(30px, 9vw, 48px);
+      line-height: 0.95;
+      letter-spacing: -2px;
+      margin-bottom: 12px;
+    }
+
+    .subtitle {
+      color: #aeb4a7;
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 28px;
+    }
+
+    .signal {
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 18px;
+      padding: 25px 15px;
+      text-align: center;
+      background: rgba(255,255,255,0.025);
+      margin-bottom: 22px;
+    }
+
+    .signal-number {
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: #9aa58d;
+      margin-bottom: 18px;
+    }
+
+    .sound-icon {
+      width: 76px;
+      height: 76px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .status {
+      font-size: 12px;
+      color: #aeb4a7;
+      margin-bottom: 18px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 13px;
+      padding: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.97);
+    }
+
+    .play-button {
+      background: #e7eadf;
+      color: #11140f;
+    }
+
+    .play-button:hover {
+      background: white;
+    }
+
+    .question {
+      margin-top: 25px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: #92998b;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .answers {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .answer {
+      background: #171b16;
+      color: #eee;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    .answer:hover {
+      background: #222820;
+      border-color: rgba(255,255,255,0.3);
+    }
+
+    .answer.correct {
+      background: #214b2d;
+      border-color: #4f9b62;
+    }
+
+    .answer.wrong {
+      background: #4b2525;
+      border-color: #a05252;
+    }
+
+    .result {
+      display: none;
+      margin-top: 20px;
+      padding: 18px;
+      border-radius: 14px;
+      text-align: center;
+      background: rgba(255,255,255,0.05);
+    }
+
+    .result-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .result-text {
+      font-size: 13px;
+      color: #aeb4a7;
+    }
+
+    .next-button {
+      margin-top: 15px;
+      background: transparent;
+      color: #f2f2e9;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .score {
+      text-align: center;
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #777f72;
+    }
+
+    .warning {
+      font-size: 10px;
+      color: #6e7569;
+      text-align: center;
+      margin-top: 18px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 380px) {
+      .answers {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 23px 17px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="container">
+
+    <div class="top-label">
+      Wildlife Week • Zoology
+    </div>
+
+    <section class="card">
+
+      <h1>Signal Hunt.</h1>
+
+      <p class="subtitle">
+        Somewhere in the wild, something is calling.
+        Listen carefully. Identify the species.
+      </p>
+
+      <div class="signal">
+
+        <div class="signal-number">
+          WILDLIFE SIGNAL
+        </div>
+
+        <div class="sound-icon">
+          🔊
+        </div>
+
+        <div class="status" id="status">
+          Signal ready.
+        </div>
+
+        <button class="play-button" id="playButton">
+          PLAY SIGNAL
+        </button>
+
+      </div>
+
+      <div class="question">
+        What did you hear?
+      </div>
+
+      <div class="answers" id="answers"></div>
+
+      <div class="result" id="result">
+
+        <div class="result-title" id="resultTitle"></div>
+
+        <div class="result-text" id="resultText"></div>
+
+        <button class="next-button" id="nextButton">
+          NEW SIGNAL
+        </button>
+
+      </div>
+
+      <div class="score" id="score">
+        FIELD POINTS: 0
+      </div>
+
+      <div class="warning">
+        Headphones recommended. Keep your volume comfortable.
+      </div>
+
+    </section>
+
+  </main>
+
+<script>
+
+  /*
+    ==========================================
+    WILDLIFE SOUND DATABASE
+    ==========================================
+  */
+
+  const animals = [
+
+    {
+      name: "Tiger",
+      file: "sounds/tiger.mp3"
+    },
+
+    {
+      name: "Elephant",
+      file: "sounds/elephant.mp3"
+    },
+
+    {
+      name: "Owl",
+      file: "sounds/owl.mp3"
+    },
+
+    {
+      name: "Frog",
+      file: "sounds/frog.mp3"
+    },
+
+    {
+      name: "Eagle",
+      file: "sounds/eagle.mp3"
+    },
+
+    {
+      name: "Peacock",
+      file: "sounds/peacock.mp3"
+    },
+
+    {
+      name: "Wolf",
+      file: "sounds/wolf.mp3"
+    },
+
+    {
+      name: "Monkey",
+      file: "sounds/monkey.mp3"
+    },
+
+    {
+      name: "Whale",
+      file: "sounds/whale.mp3"
+    },
+
+    {
+      name: "Leopard",
+      file: "sounds/leopard.mp3"
+    }
+
+  ];
+
+
+  /*
+    ==========================================
+    VARIABLES
+    ==========================================
+  */
+
+  let currentAnimal = null;
+  let previousAnimal = null;
+  let score = 0;
+  let answered = false;
+
+  const audio = new Audio();
+
+
+  /*
+    ==========================================
+    GET RANDOM ANIMAL
+    WITHOUT IMMEDIATE REPEAT
+    ==========================================
+  */
+
+  function chooseRandomAnimal() {
+
+    let available = animals.filter(
+      animal => animal.name !== previousAnimal
+    );
+
+    const randomIndex =
+      Math.floor(Math.random() * available.length);
+
+    currentAnimal = available[randomIndex];
+
+    previousAnimal = currentAnimal.name;
+
+  }
+
+
+  /*
+    ==========================================
+    CREATE ANSWER OPTIONS
+    ==========================================
+  */
+
+  function createAnswers() {
+
+    const answersContainer =
+      document.getElementById("answers");
+
+    answersContainer.innerHTML = "";
+
+    let choices = [currentAnimal.name];
+
+    while (choices.length < 4) {
+
+      const randomAnimal =
+        animals[Math.floor(Math.random() * animals.length)];
+
+      if (!choices.includes(randomAnimal.name)) {
+        choices.push(randomAnimal.name);
+      }
+
+    }
+
+    // Shuffle answers
+
+    choices.sort(() => Math.random() - 0.5);
+
+    choices.forEach(name => {
+
+      const button =
+        document.createElement("button");
+
+      button.className = "answer";
+
+      button.textContent = name;
+
+      button.onclick = () => checkAnswer(name, button);
+
+      answersContainer.appendChild(button);
+
+    });
+
+  }
+
+
+  /*
+    ==========================================
+    LOAD NEW SIGNAL
+    ==========================================
+  */
+
+  function newSignal() {
+
+    answered = false;
+
+    chooseRandomAnimal();
+
+    createAnswers();
+
+    audio.src = currentAnimal.file;
+
+    document.getElementById("status").textContent =
+      "New signal detected. Listen carefully.";
+
+    document.getElementById("result").style.display =
+      "none";
+
+    document.querySelectorAll(".answer").forEach(button => {
+
+      button.disabled = false;
+      button.classList.remove("correct");
+      button.classList.remove("wrong");
+
+    });
+
+  }
+
+
+  /*
+    ==========================================
+    PLAY SOUND
+    ==========================================
+  */
+
+  function playSound() {
+
+    audio.currentTime = 0;
+
+    audio.play()
+      .then(() => {
+
+        document.getElementById("status").textContent =
+          "Signal playing...";
+
+      })
+      .catch(() => {
+
+        document.getElementById("status").textContent =
+          "Tap PLAY SIGNAL to hear the sound.";
+
+      });
+
+  }
+
+
+  /*
+    ==========================================
+    CHECK ANSWER
+    ==========================================
+  */
+
+  function checkAnswer(answer, button) {
+
+    if (answered) return;
+
+    answered = true;
+
+    const allButtons =
+      document.querySelectorAll(".answer");
+
+    allButtons.forEach(b => {
+      b.disabled = true;
+    });
+
+
+    if (answer === currentAnimal.name) {
+
+      button.classList.add("correct");
+
+      score++;
+
+      document.getElementById("resultTitle").textContent =
+        "✓ SIGNAL IDENTIFIED";
+
+      document.getElementById("resultText").textContent =
+        "Correct. +" + 1 + " field point.";
+
+    } else {
+
+      button.classList.add("wrong");
+
+      allButtons.forEach(b => {
+
+        if (b.textContent === currentAnimal.name) {
+          b.classList.add("correct");
+        }
+
+      });
+
+      document.getElementById("resultTitle").textContent =
+        "✕ SIGNAL MISIDENTIFIED";
+
+      document.getElementById("resultText").textContent =
+        "The signal was a " + currentAnimal.name + ".";
+
+    }
+
+    document.getElementById("score").textContent =
+      "FIELD POINTS: " + score;
+
+    document.getElementById("result").style.display =
+      "block";
+
+  }
+
+
+  /*
+    ==========================================
+    BUTTON EVENTS
+    ==========================================
+  */
+
+  document
+    .getElementById("playButton")
+    .addEventListener("click", playSound);
+
+
+  document
+    .getElementById("nextButton")
+    .addEventListener("click", newSignal);
+
+
+  /*
+    ==========================================
+    START
+    ==========================================
+  */
+
+  newSignal();
+
+</script>
+
+</body>
+</html>
