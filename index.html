@@ -685,7 +685,46 @@ select:focus {
      ADMIN LOGIN
 ===================================================== -->
 
-<section id="adminLoginScreen" class="screen hidden">
+<div id="adminLoginScreen" class="screen">
+    <div class="card">
+        <div class="eyebrow">RESTRICTED ACCESS</div>
+
+        <h1>ADMIN ACCESS</h1>
+
+        <p class="subtext">Enter administrator credentials.</p>
+
+        <input
+            id="adminUsername"
+            type="text"
+            placeholder="Username"
+            autocomplete="username"
+        >
+
+        <button id="adminUsernameBtn">CONTINUE</button>
+
+        <p id="adminUsernameMessage" class="message"></p>
+    </div>
+</div>
+    <div id="adminPasswordScreen" class="screen">
+    <div class="card">
+        <div class="eyebrow">ADMIN ACCESS</div>
+
+        <h1>VERIFY</h1>
+
+        <p class="subtext">Enter the administrator password.</p>
+
+        <input
+            id="adminPassword"
+            type="password"
+            placeholder="Password"
+            autocomplete="current-password"
+        >
+
+        <button id="adminPasswordBtn">ENTER ADMIN PORTAL</button>
+
+        <p id="adminPasswordMessage" class="message"></p>
+    </div>
+</div>
 
     <div class="admin-login">
 
